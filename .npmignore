@@ -1,0 +1,37 @@
+# Source control
+.git/
+.gitignore
+
+# Tests
+test/
+*.test.js
+
+# Development
+.env
+.env.*
+*.log
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp
+tmp/
+temp/
+*.tmp
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Docs (keep README.md)
+docs/
+CHANGELOG.md
+
+# Package files
+package-lock.json
