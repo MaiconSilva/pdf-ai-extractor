@@ -132,6 +132,12 @@ const { data } = await extractor.extract({
 | `model` | `string` | `'gpt-4o-mini'` | OpenAI model to use |
 | `ocrLanguage` | `string` | `'por+eng'` | Tesseract language codes (e.g., `'eng'`, `'por+eng'`, `'deu'`) |
 | `ocrThreshold` | `number` | `50` | Minimum characters from native PDF extraction before triggering OCR |
+| `ocrRenderOptions` | `object` | `{}` | PDF rendering options for OCR (`density`, `width`, `height`, `format`) |
+| `ocrTesseractParams` | `object` | `{}` | Raw Tesseract parameters (e.g., `tessedit_pageseg_mode`, `preserve_interword_spaces`) |
+| `ocrPreprocess` | `object` | `{ enabled: false, profile: 'balanced', retryProfile: 'highContrast' }` | Image preprocessing profile before OCR |
+| `ocrMinConfidence` | `number` | `0` | Minimum OCR confidence required before accepting page result |
+| `ocrRetryEnabled` | `boolean` | `false` | Retry low-confidence pages once using retry preprocessing profile |
+| `ocrQualityCheck` | `object` | `{ enabled: true, ... }` | Native text quality heuristics used to decide OCR fallback |
 | `maxTokensPerChunk` | `number` | `8000` | Maximum tokens per chunk when splitting large documents |
 | `debug` | `boolean` | `false` | Enable debug logging |
 
@@ -205,6 +211,32 @@ try {
 5. **Chunking**: If text exceeds `maxTokensPerChunk`, splits by paragraphs
 6. **AI Processing**: Sends each chunk to OpenAI with your prompt and schema
 7. **Result Merging**: Combines chunk results (arrays concatenated, scalars use first value)
+
+## OCR Precision Profile Example
+
+```javascript
+const extractor = new PdfAiExtractor({
+  apiKey: process.env.OPENAI_API_KEY,
+  ocrLanguage: 'por',
+  ocrThreshold: 50,
+  ocrRenderOptions: {
+    density: 300,
+    width: 2200,
+    height: 3100,
+  },
+  ocrTesseractParams: {
+    tessedit_pageseg_mode: 6,
+    preserve_interword_spaces: '1',
+  },
+  ocrPreprocess: {
+    enabled: true,
+    profile: 'balanced',
+    retryProfile: 'highContrast',
+  },
+  ocrMinConfidence: 75,
+  ocrRetryEnabled: true,
+});
+```
 
 ## Cost Considerations
 
